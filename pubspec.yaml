@@ -27,11 +27,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter:
+  flutter: 
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  shared_preferences: ^0.5.6+2
+  shared_preferences: ^2.0.13
   get_it: ^7.2.0
   http: ^0.13.4
   universal_io: ^2.0.4

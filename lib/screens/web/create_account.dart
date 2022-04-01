@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyid/classes/language.dart';
 import 'package:hyid/localization/language_constants.dart';
 import 'package:hyid/main.dart';
+import 'package:hyid/models/extract_arguments_screen.dart';
 import 'package:hyid/screens/web/components/body2.dart';
 import 'package:universal_io/io.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -29,7 +30,10 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    final args =
+        (ModalRoute.of(context)!.settings.arguments as ScreenArguments);
+    print('passed values ${args.choosenLocale.toString()}');
+    //MyApp.setLocale(context, widget.locale);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(

@@ -18,18 +18,23 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
   String flag = "🇺🇸";
   String name = "English";
 
-  void _changeLanguage(Language language) async {
-    flag = language.flag;
-    name = language.name;
-
-    Locale _locale = await setLocale(language.languageCode);
-    MyApp.setLocale(context, _locale);
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    //Locale new_locale = widget.locale;
+    void _changeLanguage(Language language) async {
+      flag = language.flag;
+      name = language.name;
+
+      Locale _locale = await setLocale(language.languageCode);
+      print('language changed ${_locale}');
+      MyApp.setLocale(context, _locale);
+      //new_locale = _locale;
+    }
+
+    print('hello');
+    // print(widget.locale.toString());
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(

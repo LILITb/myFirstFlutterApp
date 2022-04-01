@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyid/models/extract_arguments_screen.dart';
 import 'package:hyid/screens/web/components/desktopSide.dart';
 
 import 'package:hyid/classes/language.dart';
@@ -11,9 +12,7 @@ import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DesktopBody1 extends StatefulWidget {
-  const DesktopBody1({
-    Key? key,
-  }) : super(key: key);
+  const DesktopBody1({Key? key}) : super(key: key);
 
   @override
   State<DesktopBody1> createState() => _DesktopBody1State();
@@ -21,10 +20,6 @@ class DesktopBody1 extends StatefulWidget {
 
 class _DesktopBody1State extends State<DesktopBody1> {
   bool checked = false;
-  void _changeLanguage(Language language) async {
-    Locale _locale = await setLocale(language.languageCode);
-    MyApp.setLocale(context, _locale);
-  }
 
   bool _isHidden = true;
   // void _togglePasswordView() {
@@ -57,6 +52,23 @@ class _DesktopBody1State extends State<DesktopBody1> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Future<String> getLanguageCode(BuildContext context) async {
+      if (Localizations.localeOf(context).languageCode == null) {
+        return Language(1, "🇺🇸", "English", "en").languageCode;
+      } else {
+        return Localizations.localeOf(context).languageCode;
+      }
+    }
+
+    Future<String> LanguageCode = getLanguageCode(context);
+
+    void _changeLanguage(Language language) async {
+      Locale _locale = await setLocale(language.languageCode);
+      MyApp.setLocale(context, _locale);
+      print('language changed ${_locale}');
+      LanguageCode = (language.languageCode as Future<String>);
+    }
+    
     dynamic validateFunc(value) {
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
@@ -313,7 +325,8 @@ class _DesktopBody1State extends State<DesktopBody1> {
                           color: Color.fromRGBO(34, 33, 32, 1),
                           fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/create-account');
+                    Navigator.of(context).pushNamed('/create-account',
+                        arguments: ScreenArguments(LanguageCode));
                   },
                   child: Text(
                     getTranslated(context, 'create'),

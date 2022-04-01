@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
+import 'package:hyid/models/extract_arguments_screen.dart';
 import 'package:hyid/screens/web/components/desktopSide.dart';
 
 import 'package:hyid/classes/language.dart';
@@ -28,6 +29,7 @@ class DesktopBody2 extends StatefulWidget {
 class _DesktopBody2State extends State<DesktopBody2> {
   bool checked = false;
   String phoneNumber = " ";
+  String countryCode = " ";
   void _changeLanguage(Language language) async {
     Locale _locale = await setLocale(language.languageCode);
     MyApp.setLocale(context, _locale);
@@ -40,7 +42,6 @@ class _DesktopBody2State extends State<DesktopBody2> {
   // }
 
   final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
 
   // void _submit() {
   //   final isValid = _formKey.currentState!.validate();
@@ -73,7 +74,13 @@ class _DesktopBody2State extends State<DesktopBody2> {
   @override
   Widget build(BuildContext context) {
     Future signup(
-        firstName, lastName, email, phone, password, confirmPassword) async {
+        {firstName,
+        lastName,
+        email,
+        phone,
+        countryCode,
+        password,
+        confirmPassword}) async {
       Map data = {
         'crateAccountLink':
             'https://development.connectto.com/hyeid-new/en/auth/registration',
@@ -84,8 +91,8 @@ class _DesktopBody2State extends State<DesktopBody2> {
         'name': firstName,
         'password': password,
         'passwordConfirmation': confirmPassword,
-        'phone': '77910137',
-        'phoneCode': '+374',
+        'phone': phone,
+        'phoneCode': countryCode,
         'surname': lastName,
         'referralMediaToken': null,
         'token': null
@@ -93,38 +100,19 @@ class _DesktopBody2State extends State<DesktopBody2> {
       print(data.toString());
 
       try {
-        final response = await http.post(
-          Uri.parse(
-              'https://development.connectto.com:8085/hyeid-back/v2/user'),
-          headers: {"Accept": "*/*", "Content-Type": "application/json"},
-          body: json.encode(data),
-        );
+        // final response = await http.post(
+        //   Uri.parse(
+        //       'https://development.connectto.com:8085/hyeid-back/v2/user'),
+        //   headers: {"Accept": "*/*", "Content-Type": "application/json"},
+        //   body: json.encode(data),
+        // );
 
-        print(response.statusCode);
-        if (response.statusCode == 200) {
-          print('created');
-          Navigator.pushReplacementNamed(context, "/verification");
-        }
-        // print(response.body);
-        // String responseapi = response.body.toString().replaceAll("\n", "");
-        // final _data = jsonDecode(responseapi);
-        // print(_data);
-        //  Map<String, dynamic> resposne = jsonDecode(response.body);
-        // print(resposne);
+        // print(response.statusCode);
         // if (response.statusCode == 200) {
-        //   Map<String, dynamic> resposne = jsonDecode(response.body);
-        //   if (!resposne['error']) {
-        //     Map<String, dynamic> user = resposne['data'];
-        //     print(data);
-        //     // savePref(1, user['name'], user['email'], user['id']);
-        //     // Navigator.pushReplacementNamed(context, "/home");
-        //   } else {
-        //     print(" ${resposne['message']}");
-        //   }
-        // } else {
-        //   print(response.statusCode);
-        //   print(response);
+        //   print('created');
+        //   Navigator.pushReplacementNamed(context, "/verification");
         // }
+
       } catch (e) {
         print('get an error');
         print(e);
@@ -167,6 +155,7 @@ class _DesktopBody2State extends State<DesktopBody2> {
     }
 
     Size size = MediaQuery.of(context).size;
+
     return TemplateForWeb(
       formKey: _formKey,
       child: Column(
@@ -263,8 +252,11 @@ class _DesktopBody2State extends State<DesktopBody2> {
                               ),
                               initialCountryCode: 'US',
                               onChanged: (phone) {
+                                print(phone.toString());
                                 print(phone.completeNumber);
-                                phoneNumber = phone.completeNumber;
+                                phoneNumber = phone.number;
+                                countryCode = phone.countryCode;
+                                print('${countryCode}, ,${phoneNumber}');
                               },
                             )),
                         const SizedBox(
@@ -355,12 +347,13 @@ class _DesktopBody2State extends State<DesktopBody2> {
                                     }
                                     _formKey.currentState!.save();
                                     signup(
-                                        firstName.text,
-                                        lastName.text,
-                                        email.text,
-                                        phoneNumber,
-                                        password.text,
-                                        confirmPassword.text);
+                                        firstName: firstName.text,
+                                        lastName: lastName.text,
+                                        email: email.text,
+                                        phone: phoneNumber,
+                                        password: password.text,
+                                        confirmPassword: confirmPassword.text,
+                                        countryCode: countryCode);
 
                                     // Navigator.of(context)
                                     //     .pushNamed('/password-setup');

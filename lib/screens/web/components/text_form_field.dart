@@ -32,7 +32,7 @@ class TextFormWidget extends StatelessWidget {
       style: const TextStyle(
         color: Color.fromRGBO(34, 33, 32, 0.4),
       ),
-      autofocus: true,
+      //autofocus: true,
       onChanged: (val) {},
       decoration: InputDecoration(
         //errorBorder: InputBorder.,

@@ -17,6 +17,8 @@ import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hyid/hyeid_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:flutter_countdown_timer/index.dart';
 
 class DesktopBody3 extends StatefulWidget {
   const DesktopBody3({
@@ -35,7 +37,28 @@ class _DesktopBody3State extends State<DesktopBody3> {
     Locale _locale = await setLocale(language.languageCode);
     MyApp.setLocale(context, _locale);
   }
+  /**
+   * timer
+   * 
+   * */
 
+  late CountdownTimerController controller;
+  int endTime = DateTime.now().millisecondsSinceEpoch +
+      Duration(seconds: 60).inMilliseconds;
+  @override
+  void initState() {
+    super.initState();
+    controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
+  }
+
+  bool isPlaying = false;
+  void onEnd() {
+    return;
+  }
+
+  void restartTimer() {
+    controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
+  }
   // void _togglePasswordView() {
   //   setState(() {
   //     _isHidden = !_isHidden;
@@ -57,27 +80,49 @@ class _DesktopBody3State extends State<DesktopBody3> {
 
   @override
   void dispose() {
-    super.dispose();
+    controller.dispose();
     verificationCode.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    String validateError = '';
+    dynamic validateFunc(value) {
+      if (value!.isEmpty) {
+        return getTranslated(context, 'required');
+      } else if (validateError.length > 0) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      return null;
+    }
+
     Future signup({verificationCode}) async {
       Map data = {"verificationCode": verificationCode};
       print(data.toString());
 
-      try {} catch (e) {
+      try {
+        final response = await http.post(
+          Uri.parse(
+              'https://development.connectto.com:8085/hyeid-back/v2/user/verify'),
+          headers: {"Accept": "*/*", "Content-Type": "application/json"},
+          body: json.encode(data),
+        );
+
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          print('created');
+          Navigator.pushReplacementNamed(context, "/");
+        } else {
+          validateFunc(verificationCode);
+          print('other');
+          print(response.statusCode);
+        }
+      } catch (e) {
         print('get an error');
         print(e);
       }
-    }
-
-    dynamic validateFunc(value) {
-      if (value!.isEmpty) {
-        return getTranslated(context, 'required');
-      }
-      return null;
     }
 
     void onChangeField(val) {
@@ -163,7 +208,7 @@ class _DesktopBody3State extends State<DesktopBody3> {
                   width: size.width * 0.7,
                   child: Form(
                     key: _formKey,
-                    autovalidateMode: AutovalidateMode.always,
+                    // autovalidateMode: AutovalidateMode.always,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +245,23 @@ class _DesktopBody3State extends State<DesktopBody3> {
                               ),
                               child: InkWell(
                                 //splashColor: Colors.black26,
-                                onTap: () {},
+                                onTap: () {
+                                  onEnd();
+                                  restartTimer();
+                                  print('tap resend');
+
+                                  if (controller.isRunning) {
+                                    controller.disposeTimer();
+                                  } else {
+                                    controller.start();
+                                  }
+
+                                  // if (controller.isRunning) {
+                                  //   controller.disposeTimer();
+                                  // } else {
+                                  //   controller.start();
+                                  // }
+                                },
                                 child: Row(
                                   children: [
                                     Text(
@@ -234,8 +295,38 @@ class _DesktopBody3State extends State<DesktopBody3> {
                           height: size.height * 0.025,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 3),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromRGBO(34, 33, 32, 1),
+                                    width: 1.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                              ),
+                              child: CountdownTimer(
+                                controller: controller,
+                                textStyle: const TextStyle(
+                                  color: Color.fromRGBO(34, 33, 32, 1),
+                                  fontSize: 20,
+                                  height: 2.0,
+                                ),
+                                onEnd: onEnd,
+                                endTime: endTime,
+                                endWidget: const Text(
+                                  '00:00:00',
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(34, 33, 32, 1),
+                                    fontSize: 20,
+                                    height: 2.6,
+                                  ),
+                                ),
+                              ),
+                            ),
                             Container(
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(7),
@@ -245,6 +336,7 @@ class _DesktopBody3State extends State<DesktopBody3> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () async {
+                                    print('submit pressed');
                                     final isValid =
                                         _formKey.currentState!.validate();
                                     if (!isValid) {

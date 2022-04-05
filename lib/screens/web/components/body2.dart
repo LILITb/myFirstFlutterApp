@@ -100,19 +100,26 @@ class _DesktopBody2State extends State<DesktopBody2> {
       print(data.toString());
 
       try {
-        // final response = await http.post(
-        //   Uri.parse(
-        //       'https://development.connectto.com:8085/hyeid-back/v2/user'),
-        //   headers: {"Accept": "*/*", "Content-Type": "application/json"},
-        //   body: json.encode(data),
-        // );
+        final response = await http.post(
+          Uri.parse(
+              'https://development.connectto.com:8085/hyeid-back/v2/user'),
+          headers: {"Accept": "*/*", "Content-Type": "application/json"},
+          body: json.encode(data),
+        );
 
-        // print(response.statusCode);
-        // if (response.statusCode == 200) {
-        //   print('created');
-        //   Navigator.pushReplacementNamed(context, "/verification");
-        // }
-
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          print('created');
+          Navigator.pushReplacementNamed(context, "/verification");
+          //        Navigator.pushNamed(
+          //   context,
+          //   ScreenArguments.routeName,
+          //   arguments: ScreenArguments(
+          //     'Extract Arguments Screen',
+          //     'This message is extracted in the build method.',
+          //   ),
+          // );
+        }
       } catch (e) {
         print('get an error');
         print(e);

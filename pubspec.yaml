@@ -41,9 +41,7 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   intl: ^0.17.0
   webview_flutter: ^2.0.9
-  flutter_ringtone_player: ^3.1.1
-  flutter_countdown_timer: ^4.1.0
-  timer_count_down: ^2.2.1
+  timer_builder: ^2.0.0
 
 
 

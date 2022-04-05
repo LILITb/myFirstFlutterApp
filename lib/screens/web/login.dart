@@ -22,18 +22,32 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    Future<String> getLanguageCode(BuildContext context) async {
+      if (Localizations.localeOf(context).languageCode == null) {
+        return Language(1, "🇺🇸", "English", "en").languageCode;
+      } else {
+        return Localizations.localeOf(context).languageCode;
+      }
+    }
+
+    Future<String> LanguageCode = getLanguageCode(context);
     //Locale new_locale = widget.locale;
     void _changeLanguage(Language language) async {
       flag = language.flag;
       name = language.name;
-
+      print('change language');
       Locale _locale = await setLocale(language.languageCode);
-      print('language changed ${_locale}');
+      // print('language changed ${_locale}');
       MyApp.setLocale(context, _locale);
       //new_locale = _locale;
+      print('language code changed ${language.languageCode}');
+      LanguageCode = _locale.languageCode as Future<String>;
+      print('locale languagecode ${LanguageCode.toString()}');
     }
 
-    print('hello');
+    print('languagecode ${LanguageCode.toString()}');
+
+    // print('hello');
     // print(widget.locale.toString());
     return Scaffold(
       resizeToAvoidBottomInset: true,

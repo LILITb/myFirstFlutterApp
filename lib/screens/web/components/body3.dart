@@ -17,8 +17,8 @@ import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hyid/hyeid_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:flutter_countdown_timer/index.dart';
+
+import 'package:timer_builder/timer_builder.dart';
 
 class DesktopBody3 extends StatefulWidget {
   const DesktopBody3({
@@ -33,54 +33,30 @@ class _DesktopBody3State extends State<DesktopBody3> {
   bool checked = false;
   String phoneNumber = " ";
   String countryCode = " ";
+  String errorMessage = '';
+  bool resendCode = true;
+
+  //timer
+  late DateTime alert;
+
   void _changeLanguage(Language language) async {
     Locale _locale = await setLocale(language.languageCode);
     MyApp.setLocale(context, _locale);
   }
-  /**
-   * timer
-   * 
-   * */
 
-  late CountdownTimerController controller;
-  int endTime = DateTime.now().millisecondsSinceEpoch +
-      Duration(seconds: 60).inMilliseconds;
   @override
   void initState() {
     super.initState();
-    controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
+    //timer
+    alert = DateTime.now().add(Duration(seconds: 60));
   }
-
-  bool isPlaying = false;
-  void onEnd() {
-    return;
-  }
-
-  void restartTimer() {
-    controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
-  }
-  // void _togglePasswordView() {
-  //   setState(() {
-  //     _isHidden = !_isHidden;
-  //   });
-  // }
 
   final _formKey = GlobalKey<FormState>();
-
-  // void _submit() {
-  //   final isValid = _formKey.currentState!.validate();
-  //   if (!isValid) {
-  //     return;
-  //   }
-  //   Navigator.of(context).pushNamed('/password-setup');
-  //   _formKey.currentState!.save();
-  // }
 
   final verificationCode = TextEditingController();
 
   @override
   void dispose() {
-    controller.dispose();
     verificationCode.dispose();
 
     super.dispose();
@@ -88,11 +64,11 @@ class _DesktopBody3State extends State<DesktopBody3> {
 
   @override
   Widget build(BuildContext context) {
-    String validateError = '';
     dynamic validateFunc(value) {
+      print('validateerror ${errorMessage}');
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
-      } else if (validateError.length > 0) {
+      } else if (errorMessage.length > 0) {
         return getTranslated(context, 'enter_valid_value');
       }
       return null;
@@ -115,9 +91,16 @@ class _DesktopBody3State extends State<DesktopBody3> {
           print('created');
           Navigator.pushReplacementNamed(context, "/");
         } else {
-          validateFunc(verificationCode);
-          print('other');
           print(response.statusCode);
+
+          Map responseBody = json.decode(response.body);
+          print(responseBody.toString());
+          setState(() {
+            errorMessage = responseBody['error_description'];
+          });
+          if (_formKey.currentState!.validate()) {
+            Navigator.pushReplacementNamed(context, "/");
+          } else {}
         }
       } catch (e) {
         print('get an error');
@@ -170,14 +153,10 @@ class _DesktopBody3State extends State<DesktopBody3> {
               ),
               color: const Color.fromRGBO(255, 255, 255, 1),
             ),
-
             margin: EdgeInsets.only(top: 27, right: size.width * 0.15),
             width: size.width * 0.3,
-            // height: size.height * 0.35,
-            //width: size.width * 0.7,
             padding: EdgeInsets.fromLTRB(
                 size.width * 0.025, 0, size.width * 0.025, 0),
-            //color: Color.fromRGBO(250, 250, 250, 1),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +197,19 @@ class _DesktopBody3State extends State<DesktopBody3> {
                             controller: verificationCode,
                             name: 'verification_code',
                             validateFunction: validateFunc,
-                            labelText: 'labelText'),
+                            labelText: 'labelText',
+                            errorMessage: errorMessage),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          resendCode == true
+                              ? getTranslated(context, 'resend_activation_code')
+                              : '',
+                          style: TextStyle(
+                            color: Color.fromRGBO(59, 158, 146, 1),
+                          ),
+                        ),
                         const SizedBox(
                           height: 35,
                         ),
@@ -244,29 +235,19 @@ class _DesktopBody3State extends State<DesktopBody3> {
                                 Radius.circular(4),
                               ),
                               child: InkWell(
-                                //splashColor: Colors.black26,
                                 onTap: () {
-                                  onEnd();
-                                  restartTimer();
                                   print('tap resend');
-
-                                  if (controller.isRunning) {
-                                    controller.disposeTimer();
-                                  } else {
-                                    controller.start();
-                                  }
-
-                                  // if (controller.isRunning) {
-                                  //   controller.disposeTimer();
-                                  // } else {
-                                  //   controller.start();
-                                  // }
+                                  if (resendCode) return;
+                                  setState(() {
+                                    alert = DateTime.now()
+                                        .add(Duration(seconds: 60));
+                                  });
                                 },
                                 child: Row(
                                   children: [
                                     Text(
                                       getTranslated(context, 'resend'),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 14,
                                         color: Color.fromRGBO(59, 158, 146, 1),
                                         height: 2,
@@ -308,24 +289,31 @@ class _DesktopBody3State extends State<DesktopBody3> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5.0)),
                               ),
-                              child: CountdownTimer(
-                                controller: controller,
-                                textStyle: const TextStyle(
-                                  color: Color.fromRGBO(34, 33, 32, 1),
-                                  fontSize: 20,
-                                  height: 2.0,
-                                ),
-                                onEnd: onEnd,
-                                endTime: endTime,
-                                endWidget: const Text(
-                                  '00:00:00',
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(34, 33, 32, 1),
-                                    fontSize: 20,
-                                    height: 2.6,
-                                  ),
-                                ),
-                              ),
+                              child: TimerBuilder.scheduled([alert],
+                                  builder: (context) {
+                                var now = DateTime.now();
+                                var reached = now.compareTo(alert) >= 0;
+
+                                resendCode = !reached ? true : false;
+
+                                return Padding(
+                                  padding: EdgeInsets.all(7.0),
+                                  child: !reached
+                                      ? TimerBuilder.periodic(
+                                          Duration(seconds: 1),
+                                          alignment: Duration.zero,
+                                          builder: (context) {
+                                          var now = DateTime.now();
+                                          var remaining = alert.difference(now);
+                                          return Text(
+                                            formatDuration(remaining),
+                                          );
+                                        })
+                                      : Text(
+                                          "00:00",
+                                        ),
+                                );
+                              }),
                             ),
                             Container(
                               child: ClipRRect(
@@ -385,4 +373,13 @@ class _DesktopBody3State extends State<DesktopBody3> {
       ),
     );
   }
+}
+
+String formatDuration(Duration d) {
+  String f(int n) {
+    return n.toString().padLeft(2, '0');
+  }
+
+  d += Duration(microseconds: 999999);
+  return "${f(d.inMinutes)}:${f(d.inSeconds % 60)}";
 }

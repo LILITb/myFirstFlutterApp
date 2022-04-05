@@ -13,17 +13,19 @@ class TextFormWidget extends StatelessWidget {
   final Function validateFunction;
   final TextEditingController controller;
   final String labelText;
+  final String errorMessage;
   const TextFormWidget(
       {Key? key,
       required this.name,
       required this.validateFunction,
       required this.controller,
-      this.labelText = 'label'})
+      this.labelText = 'label',
+      this.errorMessage = ''})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(labelText);
+    // print(labelText);
 
     return TextFormField(
       controller: controller,
@@ -51,8 +53,10 @@ class TextFormWidget extends StatelessWidget {
             : null,
         labelText:
             (labelText == 'labelText') ? null : getTranslated(context, name),
-        labelStyle: const TextStyle(
-          color: Color.fromRGBO(59, 158, 146, 1),
+        labelStyle: TextStyle(
+          color: (errorMessage.length > 0)
+              ? Colors.red
+              : Color.fromRGBO(59, 158, 146, 1),
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),

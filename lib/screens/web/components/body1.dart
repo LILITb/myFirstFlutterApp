@@ -52,23 +52,27 @@ class _DesktopBody1State extends State<DesktopBody1> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Future<String> getLanguageCode(BuildContext context) async {
-      if (Localizations.localeOf(context).languageCode == null) {
-        return Language(1, "🇺🇸", "English", "en").languageCode;
-      } else {
-        return Localizations.localeOf(context).languageCode;
-      }
-    }
+    // Future<String> getLanguageCode(BuildContext context) async {
+    //   if (Localizations.localeOf(context).languageCode == null) {
+    //     return Language(1, "🇺🇸", "English", "en").languageCode;
+    //   } else {
+    //     return Localizations.localeOf(context).languageCode;
+    //   }
+    // }
 
-    Future<String> LanguageCode = getLanguageCode(context);
+    // Future<String> LanguageCode = getLanguageCode(context);
 
-    void _changeLanguage(Language language) async {
-      Locale _locale = await setLocale(language.languageCode);
-      MyApp.setLocale(context, _locale);
-      print('language changed ${_locale}');
-      LanguageCode = (language.languageCode as Future<String>);
-    }
-    
+    // void _changeLanguage(Language language) async {
+    //   print('change language ');
+    //   Locale _locale = await setLocale(language.languageCode);
+    //   MyApp.setLocale(context, _locale);
+    //   print('language code changed ${language.languageCode}');
+    //   LanguageCode = (_locale.languageCode as Future<String>);
+    //   print('locale languagecode ${LanguageCode}');
+    // }
+
+    // print('languagecode ${LanguageCode.toString()}');
+
     dynamic validateFunc(value) {
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
@@ -325,8 +329,11 @@ class _DesktopBody1State extends State<DesktopBody1> {
                           color: Color.fromRGBO(34, 33, 32, 1),
                           fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/create-account',
-                        arguments: ScreenArguments(LanguageCode));
+                    Navigator.of(context).pushNamed(
+                      '/create-account',
+                    );
+                    // arguments:
+                    //   ScreenArguments(LanguageCode, email: 'lianaanja')
                   },
                   child: Text(
                     getTranslated(context, 'create'),

@@ -64,6 +64,11 @@ class _DesktopBody3State extends State<DesktopBody3> {
 
   @override
   Widget build(BuildContext context) {
+    //get passing datas
+
+    // final Map<String, Object> ResendData =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+
     dynamic validateFunc(value) {
       print('validateerror ${errorMessage}');
       if (value!.isEmpty) {
@@ -75,11 +80,11 @@ class _DesktopBody3State extends State<DesktopBody3> {
     }
 
     Future signup({verificationCode}) async {
-      Map data = {"verificationCode": verificationCode};
+      Map data = {'verificationCode': verificationCode.toString()};
       print(data.toString());
 
       try {
-        final response = await http.post(
+        final response = await http.patch(
           Uri.parse(
               'https://development.connectto.com:8085/hyeid-back/v2/user/verify'),
           headers: {"Accept": "*/*", "Content-Type": "application/json"},
@@ -96,11 +101,53 @@ class _DesktopBody3State extends State<DesktopBody3> {
           Map responseBody = json.decode(response.body);
           print(responseBody.toString());
           setState(() {
-            errorMessage = responseBody['error_description'];
+            errorMessage = responseBody['error_description']
+                ? responseBody['error_description']
+                : responseBody['message']
+                    ? responseBody['message']
+                    : null;
           });
           if (_formKey.currentState!.validate()) {
             Navigator.pushReplacementNamed(context, "/");
           } else {}
+        }
+      } catch (e) {
+        print('get an error');
+        print(e);
+      }
+    }
+
+    Future ResendActivationCode({verificationCode}) async {
+      Map data = {"verificationCode": verificationCode};
+      print(data.toString());
+
+      try {
+        final response = await http.patch(
+            Uri.parse(
+                'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
+            headers: {"Accept": "*/*", "Content-Type": "application/json"},
+            body: json.encode(null)
+            // body: json.encode(ResendData),
+            );
+
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          print('created');
+          setState(() {
+            resendCode = true;
+          });
+          // Navigator.pushReplacementNamed(context, "/");
+        } else {
+          print(response.statusCode);
+
+          Map responseBody = json.decode(response.body);
+          print(responseBody.toString());
+          setState(() {
+            errorMessage = responseBody['error_description'];
+          });
+          // if (_formKey.currentState!.validate()) {
+          //   Navigator.pushReplacementNamed(context, "/");
+          // } else {}
         }
       } catch (e) {
         print('get an error');
@@ -242,6 +289,7 @@ class _DesktopBody3State extends State<DesktopBody3> {
                                     alert = DateTime.now()
                                         .add(Duration(seconds: 60));
                                   });
+                                  ResendActivationCode();
                                 },
                                 child: Row(
                                   children: [

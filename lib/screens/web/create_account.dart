@@ -30,9 +30,9 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final args =
-        (ModalRoute.of(context)!.settings.arguments as ScreenArguments);
-    print('passed values ${args.choosenLocale.toString()}');
+    // final args =
+    //     (ModalRoute.of(context)!.settings.arguments as ScreenArguments);
+    // print('passed values ${args.choosenLocale.toString()}');
     //MyApp.setLocale(context, widget.locale);
     return Scaffold(
       resizeToAvoidBottomInset: true,

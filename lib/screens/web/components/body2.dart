@@ -108,9 +108,16 @@ class _DesktopBody2State extends State<DesktopBody2> {
         );
 
         print(response.statusCode);
+        Map<String, String> passingData = {
+          "email": email,
+          "link":
+              "https://development.connectto.com/hyeid-new/en/auth/verify-account",
+          "locale": "en"
+        };
         if (response.statusCode == 200) {
           print('created');
-          Navigator.pushReplacementNamed(context, "/verification");
+          Navigator.pushReplacementNamed(context, "/verification",
+              arguments: passingData);
           //        Navigator.pushNamed(
           //   context,
           //   ScreenArguments.routeName,

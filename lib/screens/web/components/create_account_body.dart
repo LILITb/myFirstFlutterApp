@@ -2,31 +2,25 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
-import 'package:hyid/models/extract_arguments_screen.dart';
-import 'package:hyid/screens/web/components/desktopSide.dart';
-
-import 'package:hyid/classes/language.dart';
-import 'package:hyid/localization/language_constants.dart';
-import 'package:hyid/main.dart';
-import 'package:hyid/screens/web/components/password_text_field.dart';
-import 'package:hyid/screens/web/components/template_for_web.dart';
-import 'package:hyid/screens/web/components/text_form_field.dart';
+import '../../../classes/language.dart';
+import '../../../localization/language_constants.dart';
+import '../../../main.dart';
+import 'password_text_field.dart';
+import 'template_for_web.dart';
+import 'text_form_field.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:hyid/hyeid_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class DesktopBody2 extends StatefulWidget {
-  const DesktopBody2({
+class DesktopCreateAccountBody extends StatefulWidget {
+  const DesktopCreateAccountBody({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DesktopBody2> createState() => _DesktopBody2State();
+  State<DesktopCreateAccountBody> createState() =>
+      _DesktopCreateAccountBodyState();
 }
 
-class _DesktopBody2State extends State<DesktopBody2> {
+class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
   bool checked = false;
   String phoneNumber = " ";
   String countryCode = " ";
@@ -276,7 +270,7 @@ class _DesktopBody2State extends State<DesktopBody2> {
                         const SizedBox(
                           height: 15,
                         ),
-                        Password_text_field(
+                        PasswordTextField(
                           controller: password,
                           name: 'Password',
                           ValidateField: validateFunc,
@@ -285,7 +279,7 @@ class _DesktopBody2State extends State<DesktopBody2> {
                         const SizedBox(
                           height: 15,
                         ),
-                        Password_text_field(
+                        PasswordTextField(
                           controller: confirmPassword,
                           name: 'confirm_password',
                           ValidateField: validateFunc,

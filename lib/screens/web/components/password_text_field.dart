@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hyid/screens/web/components/desktopSide.dart';
-
-import 'package:hyid/classes/language.dart';
 import 'package:hyid/localization/language_constants.dart';
-import 'package:hyid/main.dart';
-import 'package:hyid/screens/web/components/template_for_web.dart';
-import 'package:hyid/screens/web/components/text_form_field.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class Password_text_field extends StatefulWidget {
+class PasswordTextField extends StatefulWidget {
   final Function onChanged;
   final Function ValidateField;
   final String name;
   final TextEditingController controller;
-  const Password_text_field({
+  const PasswordTextField({
     Key? key,
     required this.onChanged,
     required this.ValidateField,
@@ -23,13 +15,13 @@ class Password_text_field extends StatefulWidget {
   }) : super(key: key);
   void onChangeFunction() {}
   @override
-  State<Password_text_field> createState() => _Password_text_fieldState();
+  State<PasswordTextField> createState() => _PasswordTextFieldState();
 }
 
-class _Password_text_fieldState extends State<Password_text_field> {
+class _PasswordTextFieldState extends State<PasswordTextField> {
   bool _isHidden = true;
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
       obscureText: _isHidden,

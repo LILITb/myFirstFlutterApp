@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hyid/screens/web/components/desktopSide.dart';
-
-import 'package:hyid/classes/language.dart';
 import 'package:hyid/localization/language_constants.dart';
-import 'package:hyid/main.dart';
-import 'package:hyid/screens/web/components/template_for_web.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TextFormWidget extends StatelessWidget {
   final String name;
@@ -25,8 +18,6 @@ class TextFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(labelText);
-
     return TextFormField(
       controller: controller,
       textAlign:

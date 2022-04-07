@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hyid/classes/language.dart';
-import 'package:hyid/localization/language_constants.dart';
-import 'package:hyid/main.dart';
-import 'package:hyid/screens/web/components/body1.dart';
-import 'package:universal_io/io.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-//import 'package:test/screen/user_installation_screen_mobile/components/body1.dart';
+import '../../classes/language.dart';
+import '../../localization/language_constants.dart';
+import '../../main.dart';
+import 'components/login_body.dart';
 
 class LoginScreenWeb extends StatefulWidget {
   const LoginScreenWeb({Key? key}) : super(key: key);
@@ -31,32 +28,24 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
     }
 
     Future<String> LanguageCode = getLanguageCode(context);
-    //Locale new_locale = widget.locale;
+
     void _changeLanguage(Language language) async {
       flag = language.flag;
       name = language.name;
-      print('change language');
+
       Locale _locale = await setLocale(language.languageCode);
-      // print('language changed ${_locale}');
+
       MyApp.setLocale(context, _locale);
-      //new_locale = _locale;
-      print('language code changed ${language.languageCode}');
       LanguageCode = _locale.languageCode as Future<String>;
-      print('locale languagecode ${LanguageCode.toString()}');
     }
 
-    print('languagecode ${LanguageCode.toString()}');
-
-    // print('hello');
-    // print(widget.locale.toString());
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 120,
         actions: [
           Container(
-            margin: EdgeInsets.fromLTRB(0, 33, 73, 33),
-            //  width: ,
+            margin: const EdgeInsets.fromLTRB(0, 33, 73, 33),
             height: 48,
             child: Row(
               children: [
@@ -84,7 +73,7 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
                         ),
                         Text(
                           getTranslated(context, 'hyeid_website'),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color.fromRGBO(34, 33, 32, 1),
                             height: 1.8,
@@ -97,26 +86,26 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Container(
-                  padding: EdgeInsets.all(7),
+                  padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 1),
+                        offset: const Offset(0, 1),
                         blurRadius: 5,
                         color: Colors.black.withOpacity(0.2),
                       ),
                     ],
                     border: Border.all(
-                      color: Color.fromRGBO(34, 33, 32, 0.1),
+                      color: const Color.fromRGBO(34, 33, 32, 0.1),
                       style: BorderStyle.solid,
                       width: 1.0,
                     ),
-                    color: Color.fromRGBO(250, 250, 247, 1),
+                    color: const Color.fromRGBO(250, 250, 247, 1),
                   ),
                   child: DropdownButton(
                     style: const TextStyle(
@@ -134,7 +123,7 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
                         children: [
                           Text(
                             flag,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color.fromRGBO(34, 33, 32, 0.7),
                                 fontSize: 14,
                                 height: 1.2),
@@ -187,8 +176,8 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
         ],
         backgroundColor: Color.fromRGBO(254, 254, 253, 1),
       ),
-      body: SingleChildScrollView(
-        child: DesktopBody1(),
+      body: const SingleChildScrollView(
+        child: DesktopLoginBody(),
       ),
     );
   }

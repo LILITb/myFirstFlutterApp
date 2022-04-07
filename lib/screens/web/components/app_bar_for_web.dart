@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hyid/classes/language.dart';
-import 'package:hyid/localization/language_constants.dart';
-
+import '../../../localization/language_constants.dart';
 import 'language_dropdown.dart';
 
 class AppBarForWeb extends StatelessWidget implements PreferredSizeWidget {
@@ -71,19 +69,19 @@ class AppBarForWeb extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ],
                   border: Border.all(
-                    color: Color.fromRGBO(34, 33, 32, 0.1),
+                    color: const Color.fromRGBO(34, 33, 32, 0.1),
                     style: BorderStyle.solid,
                     width: 1.0,
                   ),
                   color: const Color.fromRGBO(250, 250, 247, 1),
                 ),
-                child: LanguageDropdown(),
+                child: const LanguageDropdown(),
               ),
             ],
           ),
         ),
       ],
-      backgroundColor: Color.fromRGBO(254, 254, 253, 1),
+      backgroundColor: const Color.fromRGBO(254, 254, 253, 1),
     );
   }
 }

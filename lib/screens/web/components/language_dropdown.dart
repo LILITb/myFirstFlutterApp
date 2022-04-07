@@ -44,7 +44,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
           children: [
             Text(
               flag,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color.fromRGBO(34, 33, 32, 0.7),
                   fontSize: 14,
                   height: 1.2),

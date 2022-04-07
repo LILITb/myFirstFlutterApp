@@ -1,10 +1,8 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:hyid/localization/demo_localization.dart';
-import 'package:hyid/responsive.dart';
-import 'package:hyid/constants.dart';
-import 'package:hyid/screens/web/verification.dart';
+import 'localization/demo_localization.dart';
+import 'responsive.dart';
+import 'constants.dart';
+import 'screens/web/verification.dart';
 
 import 'screens/web/create_account.dart';
 import 'screens/web/login.dart';
@@ -17,7 +15,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   static void setLocale(BuildContext context, Locale newLocale) {
     final _MyAppState? st = context.findAncestorStateOfType<_MyAppState>();
-    // _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+
     _MyAppState state = (st as _MyAppState);
     state.setLocale(newLocale);
   }
@@ -38,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() {
     getLocale().then((locale) {
       setState(() {
-        this._locale = locale;
+        _locale = locale;
       });
     });
     super.didChangeDependencies();
@@ -60,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primaryColor: kPrimaryColor,
           scaffoldBackgroundColor: Colors.white,
-          // fontFamily: 'Roboto',
+          fontFamily: 'Assistant',
           textTheme: ThemeData.light().textTheme.copyWith(
                 bodyText1: const TextStyle(
                   // color: Colors.blue,
@@ -77,12 +75,12 @@ class _MyAppState extends State<MyApp> {
               ),
         ),
         locale: _locale,
-        supportedLocales: [
+        supportedLocales: const [
           Locale('en', 'US'),
           Locale('hy', 'AM'),
           Locale('ru', 'RU')
         ],
-        localizationsDelegates: [
+        localizationsDelegates: const [
           DemoLocalization.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -99,29 +97,17 @@ class _MyAppState extends State<MyApp> {
           }
           return supportedLocales.first;
         },
-        home: Scaffold(
+        home: const Scaffold(
           resizeToAvoidBottomInset: false,
           body: Responsive(
               web: LoginScreenWeb(),
               android: LoginScreenWeb(),
               ios: LoginScreenWeb(),
               smallWeb: LoginScreenWeb()),
-          //  LayoutBuilder(
-          //   builder: (context, constraints) {
-          //     if (constraints.maxWidth < 500) {
-          //       return UserInstallationScreenMobile1();
-          //     } else {
-          //       return UserInstallationScreen1Web();
-          //     }
-          //   },
-          // ),
         ),
         routes: {
-          '/create-account': (ctx) => CreateAccountWeb(),
-          '/verification': (ctx) => VerificationScreenWeb(),
-          // '/personal-information': (ctx) => UserInstallationScreen3(),
-          // '/password-setup': (ctx) => UserInstallationScreen4(),
-          // '/installation-done': (ctx) => UserInstallationScreen5(),
+          '/create-account': (ctx) => const CreateAccountWeb(),
+          '/verification': (ctx) => const VerificationScreenWeb(),
         },
       );
     }

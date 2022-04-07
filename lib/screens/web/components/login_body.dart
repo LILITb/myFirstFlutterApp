@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyid/models/extract_arguments_screen.dart';
-import 'package:hyid/screens/web/components/desktopSide.dart';
 
 import 'package:hyid/classes/language.dart';
 import 'package:hyid/localization/language_constants.dart';
@@ -11,14 +10,14 @@ import 'package:hyid/screens/web/components/text_form_field.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DesktopBody1 extends StatefulWidget {
-  const DesktopBody1({Key? key}) : super(key: key);
+class DesktopLoginBody extends StatefulWidget {
+  const DesktopLoginBody({Key? key}) : super(key: key);
 
   @override
-  State<DesktopBody1> createState() => _DesktopBody1State();
+  State<DesktopLoginBody> createState() => _DesktopLoginBodyState();
 }
 
-class _DesktopBody1State extends State<DesktopBody1> {
+class _DesktopLoginBodyState extends State<DesktopLoginBody> {
   bool checked = false;
 
   bool _isHidden = true;
@@ -153,7 +152,7 @@ class _DesktopBody1State extends State<DesktopBody1> {
                         const SizedBox(
                           height: 15,
                         ),
-                        Password_text_field(
+                        PasswordTextField(
                           controller: password,
                           name: 'Password',
                           ValidateField: validateFunc,

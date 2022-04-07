@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hyid/classes/language.dart';
-import 'package:hyid/localization/language_constants.dart';
-import 'package:hyid/main.dart';
-import 'package:hyid/models/extract_arguments_screen.dart';
-import 'package:hyid/screens/web/components/body2.dart';
-import 'package:universal_io/io.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-//import 'package:test/screen/user_installation_screen_mobile/components/body1.dart';
+import '../../classes/language.dart';
+import '../../localization/language_constants.dart';
+import '../../main.dart';
+import 'components/create_account_body.dart';
 
 class CreateAccountWeb extends StatefulWidget {
   const CreateAccountWeb({Key? key}) : super(key: key);
@@ -41,7 +37,6 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
         actions: [
           Container(
             margin: EdgeInsets.fromLTRB(0, 33, 73, 33),
-            //  width: ,
             height: 48,
             child: Row(
               children: [
@@ -69,7 +64,7 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
                         ),
                         Text(
                           getTranslated(context, 'hyeid_website'),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color.fromRGBO(34, 33, 32, 1),
                             height: 1.8,
@@ -82,26 +77,26 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Container(
-                  padding: EdgeInsets.all(7),
+                  padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 1),
+                        offset: const Offset(0, 1),
                         blurRadius: 5,
                         color: Colors.black.withOpacity(0.2),
                       ),
                     ],
                     border: Border.all(
-                      color: Color.fromRGBO(34, 33, 32, 0.1),
+                      color: const Color.fromRGBO(34, 33, 32, 0.1),
                       style: BorderStyle.solid,
                       width: 1.0,
                     ),
-                    color: Color.fromRGBO(250, 250, 247, 1),
+                    color: const Color.fromRGBO(250, 250, 247, 1),
                   ),
                   child: DropdownButton(
                     style: const TextStyle(
@@ -111,7 +106,7 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
                     onChanged: (Language? language) {
                       _changeLanguage(language!);
                     },
-                    underline: SizedBox(),
+                    underline: const SizedBox(),
                     hint: Container(
                       width: 135,
                       height: 80,
@@ -119,7 +114,7 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
                         children: [
                           Text(
                             flag,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color.fromRGBO(34, 33, 32, 0.7),
                                 fontSize: 14,
                                 height: 1.2),
@@ -170,10 +165,10 @@ class _CreateAccountWebState extends State<CreateAccountWeb> {
             ),
           ),
         ],
-        backgroundColor: Color.fromRGBO(254, 254, 253, 1),
+        backgroundColor: const Color.fromRGBO(254, 254, 253, 1),
       ),
-      body: SingleChildScrollView(
-        child: DesktopBody2(),
+      body: const SingleChildScrollView(
+        child: DesktopCreateAccountBody(),
       ),
     );
   }

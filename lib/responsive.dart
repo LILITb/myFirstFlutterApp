@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-//import 'dart:io' show Platform;
 import 'package:universal_io/io.dart';
 
 class Responsive extends StatelessWidget {
@@ -16,9 +14,6 @@ class Responsive extends StatelessWidget {
     required this.smallWeb,
   }) : super();
 
-// This size work fine on my design, maybe you need some customization depends on your design
-
-  // This isMobile, isTablet, isDesktop helep us later
   static bool isAndroid(BuildContext context) => Platform.isAndroid;
   static bool isIos(BuildContext context) => Platform.isIOS;
 

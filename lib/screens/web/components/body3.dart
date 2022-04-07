@@ -80,16 +80,19 @@ class _DesktopBody3State extends State<DesktopBody3> {
     }
 
     Future signup({verificationCode}) async {
-      Map data = {'verificationCode': verificationCode.toString()};
-      print(data.toString());
+      print(verificationCode);
 
       try {
+        Map<String, String> data = {"verificationCode": verificationCode};
         final response = await http.patch(
-          Uri.parse(
-              'https://development.connectto.com:8085/hyeid-back/v2/user/verify'),
-          headers: {"Accept": "*/*", "Content-Type": "application/json"},
-          body: json.encode(data),
-        );
+            Uri.parse(
+                'https://development.connectto.com:8085/hyeid-back/v2/user/verify'),
+            headers: {
+              "Accept": "*/*",
+              "Content-Type": "text/plain",
+              "Authorization": "Basic bW9iaWxlOnNlY3JldA=="
+            },
+            body: json.encode(int.parse(verificationCode)));
 
         print(response.statusCode);
         if (response.statusCode == 200) {
@@ -101,9 +104,9 @@ class _DesktopBody3State extends State<DesktopBody3> {
           Map responseBody = json.decode(response.body);
           print(responseBody.toString());
           setState(() {
-            errorMessage = responseBody['error_description']
+            errorMessage = responseBody['error_description'].length > 0
                 ? responseBody['error_description']
-                : responseBody['message']
+                : responseBody['message'].length > 0
                     ? responseBody['message']
                     : null;
           });
@@ -117,18 +120,23 @@ class _DesktopBody3State extends State<DesktopBody3> {
       }
     }
 
-    Future ResendActivationCode({verificationCode}) async {
-      Map data = {"verificationCode": verificationCode};
-      print(data.toString());
-
+    Future ResendActivationCode() async {
+      // Map data = {"verificationCode": verificationCode};
+      // print(data.toString());
+      print('sjkfjsf');
       try {
+        Map<String, String> passingData = {
+          "email": 'vonan21332@vsooc.com',
+          "link":
+              "https://development.connectto.com/hyeid-new/en/auth/verify-account",
+          "locale": "en"
+        };
+
         final response = await http.patch(
             Uri.parse(
                 'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
             headers: {"Accept": "*/*", "Content-Type": "application/json"},
-            body: json.encode(null)
-            // body: json.encode(ResendData),
-            );
+            body: json.encode(passingData));
 
         print(response.statusCode);
         if (response.statusCode == 200) {
@@ -282,14 +290,14 @@ class _DesktopBody3State extends State<DesktopBody3> {
                                 Radius.circular(4),
                               ),
                               child: InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   print('tap resend');
                                   if (resendCode) return;
                                   setState(() {
                                     alert = DateTime.now()
                                         .add(Duration(seconds: 60));
                                   });
-                                  ResendActivationCode();
+                                  await ResendActivationCode();
                                 },
                                 child: Row(
                                   children: [

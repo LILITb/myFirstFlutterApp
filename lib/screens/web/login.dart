@@ -19,15 +19,15 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    Future<String> getLanguageCode(BuildContext context) async {
-      if (Localizations.localeOf(context).languageCode == null) {
-        return Language(1, "🇺🇸", "English", "en").languageCode;
-      } else {
-        return Localizations.localeOf(context).languageCode;
-      }
-    }
+    // Future<String> getLanguageCode(BuildContext context) async {
+    //   if (Localizations.localeOf(context).languageCode == null) {
+    //     return Language(1, "🇺🇸", "English", "en").languageCode;
+    //   } else {
+    //     return Localizations.localeOf(context).languageCode;
+    //   }
+    // }
 
-    Future<String> LanguageCode = getLanguageCode(context);
+    // Future<String> LanguageCode = getLanguageCode(context);
 
     void _changeLanguage(Language language) async {
       flag = language.flag;
@@ -36,7 +36,6 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
       Locale _locale = await setLocale(language.languageCode);
 
       MyApp.setLocale(context, _locale);
-      LanguageCode = _locale.languageCode as Future<String>;
     }
 
     return Scaffold(
@@ -112,7 +111,7 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
                       fontSize: 14,
                       height: 1.8,
                     ),
-                    onChanged: (Language? language) {
+                    onChanged: (Language? language) async {
                       _changeLanguage(language!);
                     },
                     underline: SizedBox(),

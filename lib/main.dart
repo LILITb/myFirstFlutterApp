@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'classes/language.dart';
 import 'localization/demo_localization.dart';
 import 'responsive.dart';
 import 'constants.dart';
@@ -15,9 +16,20 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   static void setLocale(BuildContext context, Locale newLocale) {
     final _MyAppState? st = context.findAncestorStateOfType<_MyAppState>();
-
     _MyAppState state = (st as _MyAppState);
     state.setLocale(newLocale);
+  }
+
+  static getFlagAndLanguage() {
+    getLocale().then((locale) {
+      Language.languageList().map((lang) {
+        if (lang.languageCode == locale.languageCode) {
+          return {'flag': lang.flag, 'name': lang.name};
+        }
+      });
+
+      return null;
+    });
   }
 
   @override

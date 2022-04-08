@@ -29,23 +29,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
     MyApp.setLocale(context, _locale);
   }
 
-  // void _togglePasswordView() {
-  //   setState(() {
-  //     _isHidden = !_isHidden;
-  //   });
-  // }
-
   final _formKey = GlobalKey<FormState>();
-
-  // void _submit() {
-  //   final isValid = _formKey.currentState!.validate();
-  //   if (!isValid) {
-  //     return;
-  //   }
-  //   Navigator.of(context).pushNamed('/password-setup');
-  //   _formKey.currentState!.save();
-  // }
-
   final firstName = TextEditingController();
   final lastName = TextEditingController();
   final email = TextEditingController();
@@ -91,7 +75,6 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
         'referralMediaToken': null,
         'token': null
       };
-      print(data.toString());
 
       try {
         final response = await http.post(
@@ -101,7 +84,6 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
           body: json.encode(data),
         );
 
-        print(response.statusCode);
         Map<String, String> passingData = {
           "email": email,
           "link":
@@ -112,43 +94,10 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
           print('created');
           Navigator.pushReplacementNamed(context, "/verification",
               arguments: passingData);
-          //        Navigator.pushNamed(
-          //   context,
-          //   ScreenArguments.routeName,
-          //   arguments: ScreenArguments(
-          //     'Extract Arguments Screen',
-          //     'This message is extracted in the build method.',
-          //   ),
-          // );
         }
       } catch (e) {
-        print('get an error');
         print(e);
       }
-
-      // if (response.statusCode == 200) {
-      //   setState(() {
-      //     isLoading = false;
-      //     print(response);
-      //   });
-      //   Map<String, dynamic> resposne = jsonDecode(response.body);
-      //   if (!resposne['error']) {
-      //     Map<String, dynamic> user = resposne['data'];
-      //     print(" User name ${user['data']}");
-      //     savePref(1, user['name'], user['email'], user['id']);
-      //     Navigator.pushReplacementNamed(context, "/");
-      //   } else {
-      //     print(" ${resposne['message']}");
-      //   }
-      //   // scaffoldMessenger
-      //   //     .showSnackBar(SnackBar(content: Text("${resposne['message']}")));
-      // } else {
-      //   print(response.statusCode);
-      //   print(response);
-      //   print('cant create account');
-      //   // scaffoldMessenger
-      //   //     .showSnackBar(SnackBar(content: Text("Please Try again")));
-      // }
     }
 
     dynamic validateFunc(value) {
@@ -203,14 +152,10 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
               ),
               color: const Color.fromRGBO(255, 255, 255, 1),
             ),
-
             margin: EdgeInsets.only(top: 27, right: size.width * 0.15),
             width: size.width * 0.3,
-            // height: size.height * 0.35,
-            //width: size.width * 0.7,
             padding: EdgeInsets.fromLTRB(
                 size.width * 0.025, 0, size.width * 0.025, 0),
-            //color: Color.fromRGBO(250, 250, 250, 1),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +197,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                         Container(
                             width: size.width * 0.3,
                             child: IntlPhoneField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Phone Number',
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(),
@@ -260,11 +205,8 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                               ),
                               initialCountryCode: 'US',
                               onChanged: (phone) {
-                                print(phone.toString());
-                                print(phone.completeNumber);
                                 phoneNumber = phone.number;
                                 countryCode = phone.countryCode;
-                                print('${countryCode}, ,${phoneNumber}');
                               },
                             )),
                         const SizedBox(
@@ -292,15 +234,14 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(right: 15),
-                              // alignment: Alignment.topRight,
+                              margin: const EdgeInsets.only(right: 15),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(7),
                                 child: ElevatedButton(
                                   child: Text(
                                     getTranslated(context, 'cancel'),
-                                    style: TextStyle(
-                                      color: const Color.fromRGBO(
+                                    style: const TextStyle(
+                                      color: Color.fromRGBO(
                                         59,
                                         158,
                                         146,
@@ -323,7 +264,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 24, vertical: 14),
                                       textStyle: const TextStyle(
-                                          color: const Color.fromRGBO(
+                                          color: Color.fromRGBO(
                                             59,
                                             158,
                                             146,
@@ -336,7 +277,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 35,
                             ),
                             Container(
@@ -345,7 +286,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                                 child: ElevatedButton(
                                   child: Text(
                                     getTranslated(context, 'create'),
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () async {
                                     final isValid =
@@ -362,10 +303,6 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                                         password: password.text,
                                         confirmPassword: confirmPassword.text,
                                         countryCode: countryCode);
-
-                                    // Navigator.of(context)
-                                    //     .pushNamed('/password-setup');
-                                    // _formKey.currentState!.save();
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: const Color.fromRGBO(
@@ -387,7 +324,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 62,
                         ),
                       ],

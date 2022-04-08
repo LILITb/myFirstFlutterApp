@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
-import 'package:hyid/models/extract_arguments_screen.dart';
-
 import '../../../classes/language.dart';
 import '../../../localization/language_constants.dart';
-import 'package:hyid/main.dart';
+import '../../../main.dart';
 import 'template_for_web.dart';
 import 'text_form_field.dart';
 
@@ -56,12 +53,10 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
   @override
   Widget build(BuildContext context) {
     //get passing datas
-
-    // final Map<String, Object> ResendData =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+    final Map<String, Object> passingData =
+        ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
 
     dynamic validateFunc(value) {
-      print('validateerror ${errorMessage}');
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
       } else if (errorMessage.length > 0) {
@@ -71,8 +66,6 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
     }
 
     Future signup({verificationCode}) async {
-      print(verificationCode);
-
       try {
         Map<String, String> data = {"verificationCode": verificationCode};
         final response = await http.patch(
@@ -85,15 +78,11 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
             },
             body: json.encode(int.parse(verificationCode)));
 
-        print(response.statusCode);
         if (response.statusCode == 200) {
-          print('created');
           Navigator.pushReplacementNamed(context, "/");
         } else {
-          print(response.statusCode);
-
           Map responseBody = json.decode(response.body);
-          print(responseBody.toString());
+
           setState(() {
             errorMessage = responseBody['error_description'].length > 0
                 ? responseBody['error_description']
@@ -106,50 +95,30 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
           } else {}
         }
       } catch (e) {
-        print('get an error');
         print(e);
       }
     }
 
     Future ResendActivationCode() async {
-      // Map data = {"verificationCode": verificationCode};
-      // print(data.toString());
-      print('sjkfjsf');
       try {
-        Map<String, String> passingData = {
-          "email": 'cicap63456@nuesond.com',
-          "link":
-              "https://development.connectto.com/hyeid-new/en/auth/verify-account",
-          "locale": "en"
-        };
-
         final response = await http.patch(
             Uri.parse(
                 'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
             headers: {"Accept": "*/*", "Content-Type": "application/json"},
             body: json.encode(passingData));
 
-        print(response.statusCode);
         if (response.statusCode == 200) {
-          print('created');
           setState(() {
             resendCode = true;
           });
-          // Navigator.pushReplacementNamed(context, "/");
         } else {
-          print(response.statusCode);
-
           Map responseBody = json.decode(response.body);
-          print(responseBody.toString());
+
           setState(() {
             errorMessage = responseBody['error_description'];
           });
-          // if (_formKey.currentState!.validate()) {
-          //   Navigator.pushReplacementNamed(context, "/");
-          // } else {}
         }
       } catch (e) {
-        print('get an error');
         print(e);
       }
     }
@@ -252,7 +221,7 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                           resendCode == true
                               ? getTranslated(context, 'resend_activation_code')
                               : '',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color.fromRGBO(59, 158, 146, 1),
                           ),
                         ),
@@ -282,11 +251,10 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                               ),
                               child: InkWell(
                                 onTap: () async {
-                                  print('tap resend');
                                   if (resendCode) return;
                                   setState(() {
                                     alert = DateTime.now()
-                                        .add(Duration(seconds: 60));
+                                        .add(const Duration(seconds: 60));
                                   });
                                   await ResendActivationCode();
                                 },
@@ -294,7 +262,7 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                                   children: [
                                     Text(
                                       getTranslated(context, 'resend'),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         color: Color.fromRGBO(59, 158, 146, 1),
                                         height: 2,
@@ -326,15 +294,15 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 3),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Color.fromRGBO(34, 33, 32, 1),
+                                    color: const Color.fromRGBO(34, 33, 32, 1),
                                     width: 1.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(5.0)),
                               ),
                               child: TimerBuilder.scheduled([alert],
                                   builder: (context) {
@@ -356,7 +324,7 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                                             formatDuration(remaining),
                                           );
                                         })
-                                      : Text(
+                                      : const Text(
                                           "00:00",
                                         ),
                                 );
@@ -368,10 +336,9 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                                 child: ElevatedButton(
                                   child: Text(
                                     getTranslated(context, 'submit'),
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () async {
-                                    print('submit pressed');
                                     final isValid =
                                         _formKey.currentState!.validate();
                                     if (!isValid) {
@@ -381,10 +348,6 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                                     signup(
                                       verificationCode: verificationCode.text,
                                     );
-
-                                    // Navigator.of(context)
-                                    //     .pushNamed('/password-setup');
-                                    // _formKey.currentState!.save();
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: const Color.fromRGBO(
@@ -406,7 +369,7 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 62,
                         ),
                       ],
@@ -427,6 +390,6 @@ String formatDuration(Duration d) {
     return n.toString().padLeft(2, '0');
   }
 
-  d += Duration(microseconds: 999999);
+  d += const Duration(microseconds: 999999);
   return "${f(d.inMinutes)}:${f(d.inSeconds % 60)}";
 }

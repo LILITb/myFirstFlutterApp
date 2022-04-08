@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hyid/localization/language_constants.dart';
+import '../../../localization/language_constants.dart';
 
 class TemplateForWeb extends StatelessWidget {
   const TemplateForWeb({

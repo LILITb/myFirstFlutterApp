@@ -18,14 +18,32 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
     String flag = "🇺🇸";
     String name = "English";
 
-    void _changeLanguage(Language language) async {
-      setState(() {
-        flag = language.flag;
-        name = language.name;
-      });
+    // void getCurrentLocale() async {
+    //   getLocale().then((locale) {
+    //     setState(() {
+    //       Language.languageList().map((lang) {
+    //         if (lang.languageCode == locale.languageCode) {
+    //           print('in');
+    //           flag = lang.flag;
+    //           name = lang.name;
+    //         }
+    //       });
+    //     });
+    //   });
+    // }
+    //print(MyApp.getFlagAndLanguage());
 
+    //Locale currentLocale =await  getLocale();
+    Future _changeLanguage(Language language) async {
       Locale _locale = await setLocale(language.languageCode);
       MyApp.setLocale(context, _locale);
+      return {'flag': language.flag, 'name': language.name};
+      // setState(() {
+      //   flag = language.flag;
+      //   name = language.name;
+      // });
+      // print(name);
+      // print(flag);
     }
 
     return DropdownButton(
@@ -33,8 +51,14 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
         fontSize: 14,
         height: 1.8,
       ),
-      onChanged: (Language? language) {
-        _changeLanguage(language!);
+      onChanged: (Language? language) async {
+        Map<String, String> data = await _changeLanguage(language!);
+        setState(() {
+          flag = data['flag'] as String;
+          name = data['name'] as String;
+        });
+        print(flag);
+        print(name);
       },
       underline: SizedBox(),
       hint: Container(

@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import '../../../localization/language_constants.dart';
 import 'language_dropdown.dart';
 
-class AppBarForWeb extends StatelessWidget implements PreferredSizeWidget {
+class AppBarForWeb extends StatefulWidget implements PreferredSizeWidget {
   const AppBarForWeb({Key? key, required this.size})
       : preferredSize = const Size.fromHeight(120.0);
   final Size size;
   final Size preferredSize;
+
+  @override
+  State<AppBarForWeb> createState() => _AppBarForWebState();
+}
+
+class _AppBarForWebState extends State<AppBarForWeb> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -26,7 +32,9 @@ class AppBarForWeb extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 child: InkWell(
                   splashColor: Colors.black26,
-                  onTap: () {},
+                  onTap: () {
+                    
+                  },
                   child: Row(
                     children: [
                       Ink.image(

@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
+import 'package:hyid/screens/web/components/left_side_form_wrapper.dart';
 import '../../../classes/language.dart';
+import '../../../constants.dart';
 import '../../../localization/language_constants.dart';
 import '../../../main.dart';
+import 'left_side_title.dart';
+import 'step_button2.dart';
 import 'template_for_web.dart';
 import 'text_form_field.dart';
 
@@ -53,8 +57,8 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
   @override
   Widget build(BuildContext context) {
     //get passing datas
-    final Map<String, Object> passingData =
-        ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+    // final Map<String, Object> passingData =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
 
     dynamic validateFunc(value) {
       if (value!.isEmpty) {
@@ -102,10 +106,11 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
     Future ResendActivationCode() async {
       try {
         final response = await http.patch(
-            Uri.parse(
-                'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
-            headers: {"Accept": "*/*", "Content-Type": "application/json"},
-            body: json.encode(passingData));
+          Uri.parse(
+              'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
+          headers: {"Accept": "*/*", "Content-Type": "application/json"},
+          //body: json.encode(passingData)
+        );
 
         if (response.statusCode == 200) {
           setState(() {
@@ -127,54 +132,28 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
       return;
     }
 
+    void onSubmit() async {
+      final isValid = _formKey.currentState!.validate();
+      if (!isValid) {
+        return;
+      }
+      _formKey.currentState!.save();
+      signup(
+        verificationCode: verificationCode.text,
+      );
+    }
+
+    late Widget child;
     Size size = MediaQuery.of(context).size;
 
     return TemplateForWeb(
       formKey: _formKey,
       child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.only(
-                top: size.height * 0.18, right: size.width * 0.15),
-            width: size.width * 0.3,
-            height: size.height * 0.08,
-            child: Center(
-              child: Text(
-                getTranslated(context, 'account_verification'),
-                style: const TextStyle(
-                  color: Color.fromRGBO(34, 33, 32, 1),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                  height: 2.4,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              boxShadow: const [
-                BoxShadow(
-                  offset: Offset(0, 1),
-                  blurRadius: 5,
-                  color: Color.fromRGBO(0, 0, 0, 0.05),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color.fromRGBO(34, 33, 32, 0.1),
-                style: BorderStyle.solid,
-                width: 1.0,
-              ),
-              color: const Color.fromRGBO(255, 255, 255, 1),
-            ),
-            margin: EdgeInsets.only(top: 27, right: size.width * 0.15),
-            width: size.width * 0.3,
-            padding: EdgeInsets.fromLTRB(
-                size.width * 0.025, 0, size.width * 0.025, 0),
+          LeftSideTitle(size: size, title: "account_verification"),
+          LeftFormWrapper(
+            size: size,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: size.height * 0.022,
@@ -183,12 +162,7 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                   width: size.width * 0.8,
                   child: Text(
                     getTranslated(context, "verification_text"),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      height: 2.1,
-                      color: Color.fromRGBO(34, 33, 32, 1),
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
                 const Divider(
@@ -330,43 +304,39 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                                 );
                               }),
                             ),
-                            Container(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(7),
-                                child: ElevatedButton(
-                                  child: Text(
-                                    getTranslated(context, 'submit'),
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  onPressed: () async {
-                                    final isValid =
-                                        _formKey.currentState!.validate();
-                                    if (!isValid) {
-                                      return;
-                                    }
-                                    _formKey.currentState!.save();
-                                    signup(
-                                      verificationCode: verificationCode.text,
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      primary: const Color.fromRGBO(
-                                        59,
-                                        158,
-                                        146,
-                                        1,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 24, vertical: 14),
-                                      textStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          height: 2.1,
-                                          letterSpacing: 0.02,
-                                          fontWeight: FontWeight.w700)),
-                                ),
-                              ),
-                            )
+                            StepButton(
+                              onSubmit: onSubmit,
+                              backgroundColor: kPrimaryColor,
+                              text: 'submit',
+                              textColor: Colors.white,
+                            ),
+                            // Container(
+                            //   child: ClipRRect(
+                            //     borderRadius: BorderRadius.circular(7),
+                            //     child: ElevatedButton(
+                            //       child: Text(
+                            //         getTranslated(context, 'submit'),
+                            //         style: const TextStyle(color: Colors.white),
+                            //       ),
+                            //       onPressed: () =>o
+                            //       style: ElevatedButton.styleFrom(
+                            //           primary: const Color.fromRGBO(
+                            //             59,
+                            //             158,
+                            //             146,
+                            //             1,
+                            //           ),
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: 24, vertical: 14),
+                            //           textStyle: const TextStyle(
+                            //               color: Colors.white,
+                            //               fontSize: 16,
+                            //               height: 2.1,
+                            //               letterSpacing: 0.02,
+                            //               fontWeight: FontWeight.w700)),
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                         const SizedBox(
@@ -378,7 +348,37 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                 )
               ],
             ),
-          ),
+          )
+          // Container(
+          //   decoration: BoxDecoration(
+          //     shape: BoxShape.rectangle,
+          //     boxShadow: const [
+          //       BoxShadow(
+          //         offset: Offset(0, 1),
+          //         blurRadius: 5,
+          //         color: Color.fromRGBO(0, 0, 0, 0.05),
+          //       ),
+          //     ],
+          //     borderRadius: BorderRadius.circular(16),
+          //     border: Border.all(
+          //       color: const Color.fromRGBO(34, 33, 32, 0.1),
+          //       style: BorderStyle.solid,
+          //       width: 1.0,
+          //     ),
+          //     color: const Color.fromRGBO(255, 255, 255, 1),
+          //   ),
+          //   margin: EdgeInsets.only(top: 27, right: size.width * 0.15),
+          //   width: size.width * 0.3,
+          //   padding: EdgeInsets.fromLTRB(
+          //       size.width * 0.025, 0, size.width * 0.025, 0),
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //      widget.child,
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

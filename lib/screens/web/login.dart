@@ -28,7 +28,7 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
     //   }
     // }
 
-    //Future<String> LanguageCode = getLanguageCode(context);
+    // Future<String> LanguageCode = getLanguageCode(context);
 
     void _changeLanguage(Language language) async {
       flag = language.flag;
@@ -37,7 +37,6 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
       Locale _locale = await setLocale(language.languageCode);
 
       MyApp.setLocale(context, _locale);
-      // LanguageCode = _locale.languageCode as Future<String>;
     }
 
     return Scaffold(

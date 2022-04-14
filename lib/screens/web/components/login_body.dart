@@ -6,9 +6,9 @@ import '../../../screens/web/components/template_for_web.dart';
 import '../../../screens/web/components/text_form_field.dart';
 import 'package:url_launcher/link.dart';
 
-import 'left_side_form_wrapper.dart';
-import 'left_side_title.dart';
-import 'step_button2.dart';
+import 'right_side_form_wrapper.dart';
+import 'right_side_title.dart';
+import 'step_button.dart';
 
 class DesktopLoginBody extends StatefulWidget {
   const DesktopLoginBody({Key? key}) : super(key: key);
@@ -62,8 +62,8 @@ class _DesktopLoginBodyState extends State<DesktopLoginBody> {
       formKey: _formKey,
       child: Column(
         children: [
-          LeftSideTitle(size: size, title: "sign_in_to_your_hyeid_account"),
-          LeftFormWrapper(
+          RightSideTitle(size: size, title: "sign_in_to_your_hyeid_account"),
+          RightFormWrapper(
             size: size,
             child: Form(
               key: _formKey,

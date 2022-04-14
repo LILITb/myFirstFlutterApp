@@ -29,7 +29,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         color: Color.fromRGBO(34, 33, 32, 0.4),
       ),
       autofocus: true,
-      onChanged: (val) {},
+      onChanged: (value) => widget.onChanged(value),
       decoration: InputDecoration(
         suffix: InkWell(
           onTap: () {

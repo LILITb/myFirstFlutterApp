@@ -1,15 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import "package:http/http.dart" as http;
-import '../../../classes/language.dart';
 import '../../../constants.dart';
 import '../../../localization/language_constants.dart';
-import '../../../main.dart';
-import 'left_side_form_wrapper.dart';
-import 'left_side_title.dart';
+import 'right_side_form_wrapper.dart';
+import 'right_side_title.dart';
 import 'password_text_field.dart';
-import 'step_button2.dart';
+import 'step_button.dart';
 import 'template_for_web.dart';
 import 'text_form_field.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -50,6 +45,9 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
     phone.dispose();
   }
 
+  String passwordValue = "";
+  String confirmPasswordValue = "";
+
   void onSubmit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
@@ -79,25 +77,82 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic validateFunc(value) {
+    dynamic emailValdiate(value) {
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
+      }
+      if (!RegExp(
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          .hasMatch(value)) {
+        return 'Enter a valid email!';
       }
       return null;
     }
 
-    void onChangeField(val) {
-      return;
+    dynamic nameValdiate(String? value) {
+      if (value!.isEmpty) {
+        return getTranslated(context, 'required');
+      }
+      if (value.length < 3 || value.length > 20) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      if (!RegExp(r"[a-zA-Z -\']").hasMatch(value)) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      return null;
+    }
+
+    dynamic surnameValdiate(String? value) {
+      if (value!.isEmpty) {
+        return getTranslated(context, 'required');
+      }
+      if (value.length < 3 || value.length > 23) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      if (!RegExp(r"[a-zA-Z-\']").hasMatch(value)) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      return null;
+    }
+
+    dynamic passwordValdiate(String? value) {
+      if (value!.isEmpty) {
+        return getTranslated(context, 'required');
+      }
+      if (value.length < 8) return getTranslated(context, 'enter_valid_value');
+      if (value.contains(RegExp(r"[+ ]"))) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+
+      if (!value.contains(RegExp(r"[a-z]"))) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      if (!value.contains(RegExp(r"[A-Z]"))) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      if (!value.contains(RegExp(r"[0-9]"))) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+        return getTranslated(context, 'enter_valid_value');
+      }
+      return null;
+    }
+
+    dynamic confirmPasswordValidate(String? value) {
+      return value!.isEmpty || value != passwordValue
+          ? getTranslated(context, 'passord_mutch')
+          : null;
     }
 
     Size size = MediaQuery.of(context).size;
-    late Widget child;
+
     return TemplateForWeb(
       formKey: _formKey,
       child: Column(
         children: [
-          LeftSideTitle(size: size, title: "new_account"),
-          LeftFormWrapper(
+          RightSideTitle(size: size, title: "new_account"),
+          RightFormWrapper(
             size: size,
             child: Form(
               key: _formKey,
@@ -110,7 +165,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                   TextFormWidget(
                     controller: firstName,
                     name: 'first_name',
-                    validateFunction: validateFunc,
+                    validateFunction: nameValdiate,
                   ),
                   const SizedBox(
                     height: 15,
@@ -118,7 +173,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                   TextFormWidget(
                     controller: lastName,
                     name: 'last_name',
-                    validateFunction: validateFunc,
+                    validateFunction: surnameValdiate,
                   ),
                   const SizedBox(
                     height: 15,
@@ -126,7 +181,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                   TextFormWidget(
                     controller: email,
                     name: 'email',
-                    validateFunction: validateFunc,
+                    validateFunction: emailValdiate,
                   ),
                   const SizedBox(
                     height: 15,
@@ -152,8 +207,8 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                   PasswordTextField(
                     controller: password,
                     name: 'Password',
-                    ValidateField: validateFunc,
-                    onChanged: onChangeField,
+                    ValidateField: passwordValdiate,
+                    onChanged: (value) => passwordValue = value,
                   ),
                   const SizedBox(
                     height: 15,
@@ -161,8 +216,8 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                   PasswordTextField(
                     controller: confirmPassword,
                     name: 'confirm_password',
-                    ValidateField: validateFunc,
-                    onChanged: onChangeField,
+                    ValidateField: confirmPasswordValidate,
+                    onChanged: () {},
                   ),
                   const SizedBox(
                     height: 62,
@@ -194,132 +249,6 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
               ),
             ),
           ),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     shape: BoxShape.rectangle,
-          //     boxShadow: const [
-          //       BoxShadow(
-          //         offset: Offset(0, 1),
-          //         blurRadius: 5,
-          //         color: Color.fromRGBO(0, 0, 0, 0.05),
-          //       ),
-          //     ],
-          //     borderRadius: BorderRadius.circular(16),
-          //     border: Border.all(
-          //       color: const Color.fromRGBO(34, 33, 32, 0.1),
-          //       style: BorderStyle.solid,
-          //       width: 1.0,
-          //     ),
-          //     color: Colors.white,
-          //   ),
-          //   margin: EdgeInsets.only(top: 27, right: size.width * 0.15),
-          //   width: size.width * 0.3,
-          //   padding: EdgeInsets.fromLTRB(
-          //       size.width * 0.025, 0, size.width * 0.025, 0),
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.start,
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Container(
-          //         width: size.width * 0.7,
-          //         child: Form(
-          //           key: _formKey,
-          //           autovalidateMode: AutovalidateMode.always,
-          //           child: Column(
-          //             mainAxisAlignment: MainAxisAlignment.start,
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: <Widget>[
-          //               SizedBox(height: size.height * 0.05),
-          //               TextFormWidget(
-          //                 controller: firstName,
-          //                 name: 'first_name',
-          //                 validateFunction: validateFunc,
-          //               ),
-          //               const SizedBox(
-          //                 height: 15,
-          //               ),
-          //               TextFormWidget(
-          //                 controller: lastName,
-          //                 name: 'last_name',
-          //                 validateFunction: validateFunc,
-          //               ),
-          //               const SizedBox(
-          //                 height: 15,
-          //               ),
-          //               TextFormWidget(
-          //                 controller: email,
-          //                 name: 'email',
-          //                 validateFunction: validateFunc,
-          //               ),
-          //               const SizedBox(
-          //                 height: 15,
-          //               ),
-          //               Container(
-          //                   width: size.width * 0.3,
-          //                   child: IntlPhoneField(
-          //                     decoration: const InputDecoration(
-          //                       labelText: 'Phone Number',
-          //                       border: OutlineInputBorder(
-          //                         borderSide: BorderSide(),
-          //                       ),
-          //                     ),
-          //                     initialCountryCode: 'US',
-          //                     onChanged: (phone) {
-          //                       phoneNumber = phone.number;
-          //                       countryCode = phone.countryCode;
-          //                     },
-          //                   )),
-          //               const SizedBox(
-          //                 height: 15,
-          //               ),
-          //               PasswordTextField(
-          //                 controller: password,
-          //                 name: 'Password',
-          //                 ValidateField: validateFunc,
-          //                 onChanged: onChangeField,
-          //               ),
-          //               const SizedBox(
-          //                 height: 15,
-          //               ),
-          //               PasswordTextField(
-          //                 controller: confirmPassword,
-          //                 name: 'confirm_password',
-          //                 ValidateField: validateFunc,
-          //                 onChanged: onChangeField,
-          //               ),
-          //               const SizedBox(
-          //                 height: 62,
-          //               ),
-          //               Row(
-          //                 mainAxisAlignment: MainAxisAlignment.end,
-          //                 children: [
-          //                   StepButton(
-          //                     rightMargin: 15,
-          //                     onSubmit: onPressedCancel,
-          //                     backgroundColor: Colors.white,
-          //                     text: 'cancel',
-          //                     textColor: kPrimaryColor,
-          //                   ),
-          //                   const SizedBox(
-          //                     height: 35,
-          //                   ),
-          //                   StepButton(
-          //                       onSubmit: onSubmit,
-          //                       backgroundColor: kPrimaryColor,
-          //                       text: 'create',
-          //                       textColor: Colors.white),
-          //                 ],
-          //               ),
-          //               const SizedBox(
-          //                 height: 62,
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import "package:http/http.dart" as http;
-import 'package:hyid/screens/web/components/left_side_form_wrapper.dart';
-import '../../../classes/language.dart';
+import 'package:http/http.dart' as http;
+import 'right_side_form_wrapper.dart';
 import '../../../constants.dart';
 import '../../../localization/language_constants.dart';
-import '../../../main.dart';
-import 'left_side_title.dart';
-import 'step_button2.dart';
+import 'right_side_title.dart';
+import 'step_button.dart';
 import 'template_for_web.dart';
 import 'text_form_field.dart';
-
 import 'package:timer_builder/timer_builder.dart';
 
 class DesktopActivationCodeBody extends StatefulWidget {
@@ -32,16 +29,11 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
   //timer
   late DateTime alert;
 
-  void _changeLanguage(Language language) async {
-    Locale _locale = await setLocale(language.languageCode);
-    MyApp.setLocale(context, _locale);
-  }
-
   @override
   void initState() {
     super.initState();
     //timer
-    alert = DateTime.now().add(Duration(seconds: 60));
+    alert = DateTime.now().add(const Duration(seconds: 60));
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -56,15 +48,13 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
 
   @override
   Widget build(BuildContext context) {
-    //get passing datas
-    // final Map<String, Object> passingData =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+    // get passing datas
+    final Map<String, Object> passingData =
+        ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
 
     dynamic validateFunc(value) {
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
-      } else if (errorMessage.length > 0) {
-        return getTranslated(context, 'enter_valid_value');
       }
       return null;
     }
@@ -106,11 +96,10 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
     Future ResendActivationCode() async {
       try {
         final response = await http.patch(
-          Uri.parse(
-              'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
-          headers: {"Accept": "*/*", "Content-Type": "application/json"},
-          //body: json.encode(passingData)
-        );
+            Uri.parse(
+                'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
+            headers: {"Accept": "*/*", "Content-Type": "application/json"},
+            body: json.encode(passingData));
 
         if (response.statusCode == 200) {
           setState(() {
@@ -143,15 +132,14 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
       );
     }
 
-    late Widget child;
     Size size = MediaQuery.of(context).size;
 
     return TemplateForWeb(
       formKey: _formKey,
       child: Column(
         children: [
-          LeftSideTitle(size: size, title: "account_verification"),
-          LeftFormWrapper(
+          RightSideTitle(size: size, title: "account_verification"),
+          RightFormWrapper(
             size: size,
             child: Column(
               children: [
@@ -289,7 +277,7 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                                   padding: EdgeInsets.all(7.0),
                                   child: !reached
                                       ? TimerBuilder.periodic(
-                                          Duration(seconds: 1),
+                                          const Duration(seconds: 1),
                                           alignment: Duration.zero,
                                           builder: (context) {
                                           var now = DateTime.now();
@@ -310,33 +298,6 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                               text: 'submit',
                               textColor: Colors.white,
                             ),
-                            // Container(
-                            //   child: ClipRRect(
-                            //     borderRadius: BorderRadius.circular(7),
-                            //     child: ElevatedButton(
-                            //       child: Text(
-                            //         getTranslated(context, 'submit'),
-                            //         style: const TextStyle(color: Colors.white),
-                            //       ),
-                            //       onPressed: () =>o
-                            //       style: ElevatedButton.styleFrom(
-                            //           primary: const Color.fromRGBO(
-                            //             59,
-                            //             158,
-                            //             146,
-                            //             1,
-                            //           ),
-                            //           padding: const EdgeInsets.symmetric(
-                            //               horizontal: 24, vertical: 14),
-                            //           textStyle: const TextStyle(
-                            //               color: Colors.white,
-                            //               fontSize: 16,
-                            //               height: 2.1,
-                            //               letterSpacing: 0.02,
-                            //               fontWeight: FontWeight.w700)),
-                            //     ),
-                            //   ),
-                            // )
                           ],
                         ),
                         const SizedBox(
@@ -349,36 +310,6 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
               ],
             ),
           )
-          // Container(
-          //   decoration: BoxDecoration(
-          //     shape: BoxShape.rectangle,
-          //     boxShadow: const [
-          //       BoxShadow(
-          //         offset: Offset(0, 1),
-          //         blurRadius: 5,
-          //         color: Color.fromRGBO(0, 0, 0, 0.05),
-          //       ),
-          //     ],
-          //     borderRadius: BorderRadius.circular(16),
-          //     border: Border.all(
-          //       color: const Color.fromRGBO(34, 33, 32, 0.1),
-          //       style: BorderStyle.solid,
-          //       width: 1.0,
-          //     ),
-          //     color: const Color.fromRGBO(255, 255, 255, 1),
-          //   ),
-          //   margin: EdgeInsets.only(top: 27, right: size.width * 0.15),
-          //   width: size.width * 0.3,
-          //   padding: EdgeInsets.fromLTRB(
-          //       size.width * 0.025, 0, size.width * 0.025, 0),
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.start,
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //      widget.child,
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

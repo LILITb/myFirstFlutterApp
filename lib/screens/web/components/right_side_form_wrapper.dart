@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LeftFormWrapper extends StatelessWidget {
-  const LeftFormWrapper({
+class RightFormWrapper extends StatelessWidget {
+  const RightFormWrapper({
     Key? key,
     required this.size,
     required this.child,

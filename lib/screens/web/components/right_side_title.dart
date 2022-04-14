@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../localization/language_constants.dart';
 
-class LeftSideTitle extends StatelessWidget {
-  const LeftSideTitle({
+class RightSideTitle extends StatelessWidget {
+  const RightSideTitle({
     Key? key,
     required this.size,
     required this.title,

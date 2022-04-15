@@ -84,9 +84,10 @@ class _DesktopActivationCodeBodyState extends State<DesktopActivationCodeBody> {
                     ? responseBody['message']
                     : null;
           });
-          if (_formKey.currentState!.validate()) {
-            Navigator.pushReplacementNamed(context, "/");
-          } else {}
+          print(responseBody.toString());
+          // if (_formKey.currentState!.validate()) {
+          //   Navigator.pushReplacementNamed(context, "/");
+          // } else {}
         }
       } catch (e) {
         print(e);

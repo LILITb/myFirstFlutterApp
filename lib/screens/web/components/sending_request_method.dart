@@ -29,12 +29,12 @@ Future signup(firstName, lastName, email, phoneNumber, countryCode, password,
       body: json.encode(data),
     );
 
-    Map<String, String> passingData = {
-      "email": email,
-      "link":
-          "https://development.connectto.com/hyeid-new/en/auth/verify-account",
-      "locale": "en"
-    };
+    // Map<String, String> passingData = {
+    //   "email": email,
+    //   "link":
+    //       "https://development.connectto.com/hyeid-new/en/auth/verify-account",
+    //   "locale": "en"
+    // };
     print(response.toString());
     return response;
   } catch (e) {

@@ -217,7 +217,7 @@ class _DesktopCreateAccountBodyState extends State<DesktopCreateAccountBody> {
                     controller: confirmPassword,
                     name: 'confirm_password',
                     ValidateField: confirmPasswordValidate,
-                    onChanged: () {},
+                    onChanged: (value) => confirmPasswordValue = value,
                   ),
                   const SizedBox(
                     height: 62,

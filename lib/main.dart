@@ -3,12 +3,15 @@ import 'classes/language.dart';
 import 'localization/demo_localization.dart';
 import 'responsive.dart';
 import 'constants.dart';
+import 'screens/web/callback_screen_web.dart';
 import 'screens/web/verification.dart';
 
 import 'screens/web/create_account.dart';
 import 'screens/web/login.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'localization/language_constants.dart';
+import 'screens/web/welcome.dart';
+// import 'package:get_it/get_it.dart';
 
 void main() => runApp(const MyApp());
 
@@ -37,6 +40,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // final AuthService _authService = getIt.get<AuthService>();
   Locale? _locale;
   setLocale(Locale locale) {
     setState(() {
@@ -138,6 +142,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/create-account': (ctx) => const CreateAccountWeb(),
           '/verification': (ctx) => const VerificationScreenWeb(),
+          '/welcome': (ctx) => const WelcomeWeb(),
         },
       );
     }

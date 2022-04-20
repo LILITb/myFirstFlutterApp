@@ -1,6 +1,6 @@
 name: hyid
 description: A new Flutter project.
-
+ 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -42,12 +42,19 @@ dependencies:
   intl: ^0.17.0
   webview_flutter: ^2.0.9
   timer_builder: ^2.0.0
-
+  flutter_appauth: ^2.4.1
+  simple_gravatar: ^1.0.5
+  platform_device_id: ^1.0.1
+  flutter_web_auth: ^0.4.1
+  oauth2_client: ^2.3.3
+  oauth2: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  universal_html: ^2.0.8
+  rxdart: ^0.27.3
 
 dev_dependencies:
   flutter_test:

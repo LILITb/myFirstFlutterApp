@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hyid/components/auth.dart';
 import '../../../constants.dart';
 import '../../../localization/language_constants.dart';
 import '../../../screens/web/components/password_text_field.dart';
@@ -9,6 +12,8 @@ import 'package:url_launcher/link.dart';
 import 'right_side_form_wrapper.dart';
 import 'right_side_title.dart';
 import 'step_button.dart';
+import '../../../../components/auth.dart';
+import "package:http/http.dart" as http;
 
 class DesktopLoginBody extends StatefulWidget {
   const DesktopLoginBody({Key? key}) : super(key: key);
@@ -38,8 +43,16 @@ class _DesktopLoginBodyState extends State<DesktopLoginBody> {
     if (!isValid) {
       return;
     }
-    Navigator.of(context).pushNamed('/password-setup');
     _formKey.currentState!.save();
+    http.Response response = await login(userName.text, password.text);
+    if (response.statusCode == 200) {
+      // print(jsonDecode(response.body)['surname']);
+      Map<String, String> passingData = {
+        "userInfo":
+            "${jsonDecode(response.body)['name']} ${jsonDecode(response.body)['surname']}"
+      };
+      Navigator.of(context).pushNamed('/welcome', arguments: passingData);
+    }
   }
 
   late Widget child;

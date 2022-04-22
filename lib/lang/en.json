@@ -32,6 +32,13 @@
     "resend_activation_code": "Please, check your email, we have sent a message containing instructions to confirm your account",
     "enter_valid_email": "Enter a valid email!",
     "passord_mutch": "Confirm password and Password must be same",
+    "recover_password": "Recover your password",
+    "recover_password_enter_email": "Please enter your email to search for your account",
+    "recover": "Recover",
+    "change_password_title": "Recover Your Password",
+    "cgange_password_text": "Please check your email for a message with your recovery code",
+    "done": "DONE",
+    "change_your_pass": "Change your password",
     "change_language": "Change Language",
     "about": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }

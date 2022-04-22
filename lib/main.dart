@@ -4,6 +4,8 @@ import 'localization/demo_localization.dart';
 import 'responsive.dart';
 import 'constants.dart';
 import 'screens/web/callback_screen_web.dart';
+import 'screens/web/change_password.dart';
+import 'screens/web/forgot_password.dart';
 import 'screens/web/verification.dart';
 
 import 'screens/web/create_account.dart';
@@ -143,6 +145,8 @@ class _MyAppState extends State<MyApp> {
           '/create-account': (ctx) => const CreateAccountWeb(),
           '/verification': (ctx) => const VerificationScreenWeb(),
           '/welcome': (ctx) => const WelcomeWeb(),
+          '/forgot-password': (ctx) => const ForgotPassword(),
+          '/change-password': (ctx) => const ChangePassword(),
         },
       );
     }

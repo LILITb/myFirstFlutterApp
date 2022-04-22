@@ -103,20 +103,36 @@ class _DesktopLoginBodyState extends State<DesktopLoginBody> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Link(
-                          uri: Uri.parse(
-                              'https://development.connectto.com/hyeid-stage'),
-                          builder: (context, followLink) {
-                            return RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                  text:
-                                      getTranslated(context, 'forgot_password'),
-                                  style: Theme.of(context).textTheme.subtitle2,
-                                ),
-                              ]),
-                            );
-                          }),
+                      InkWell(
+                        //splashColor: Colors.black26,
+                        onTap: () =>
+                            Navigator.of(context).pushNamed('/forgot-password'),
+                        child: Row(
+                          children: [
+                            Text(
+                              getTranslated(context, 'forgot_password'),
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Link(
+                      //     uri: Uri.parse(
+                      //         'https://development.connectto.com/hyeid-stage'),
+                      //     builder: (context, followLink) {
+                      //       return RichText(
+                      //         text: TextSpan(children: [
+                      //           TextSpan(
+                      //             text:
+                      //                 getTranslated(context, 'forgot_password'),
+                      //             style: Theme.of(context).textTheme.subtitle2,
+                      //           ),
+                      //         ]),
+                      //       );
+                      //     }),
                     ],
                   ),
                   const SizedBox(

@@ -44,8 +44,12 @@ class _WebForgotPasswordBodyState extends State<WebForgotPasswordBody> {
     http.Response response =
         await sendCodeToEmailForForgotPassword(email.text, 'en');
     if (response.statusCode == 200) {
-      print(response.statusCode);
-      Map<String, String> passingData = {"email": email.text, "locale": "en"};
+      Map<String, String> passingData = {
+        "email": email.text,
+        "locale": "en",
+        "link":
+            "https://development.connectto.com/hyeid-new/ru/auth/change-password"
+      };
       Navigator.pushReplacementNamed(context, "/change-password",
           arguments: passingData);
       // } else {

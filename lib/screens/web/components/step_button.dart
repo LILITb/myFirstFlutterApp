@@ -10,13 +10,16 @@ class StepButton extends StatefulWidget {
     required this.textColor,
     required this.text,
     this.rightMargin = 0.0,
+    this.doneForSubmitted = true,
+    this.screenName = 'forAll',
   }) : super(key: key);
   final Function onSubmit;
   final Color backgroundColor;
   final Color textColor;
   final String text;
   final double rightMargin;
-
+  final bool doneForSubmitted;
+  final String screenName;
   @override
   State<StepButton> createState() => _StepButtonState();
 }

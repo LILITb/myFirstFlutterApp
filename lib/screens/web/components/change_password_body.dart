@@ -9,7 +9,6 @@ import 'right_side_title.dart';
 import 'step_button.dart';
 import 'template_for_web.dart';
 import 'text_form_field.dart';
-import 'package:timer_builder/timer_builder.dart';
 
 class WebChangePasswordBody extends StatefulWidget {
   const WebChangePasswordBody({
@@ -42,6 +41,8 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
   final verificationCode = TextEditingController();
   String passwordValue = "";
   String confirmPasswordValue = "";
+  bool validate = false;
+
   @override
   void dispose() {
     verificationCode.dispose();
@@ -56,10 +57,23 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
     final Map<String, Object> passingData =
         ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
 
+    void onChangeField() {
+      final isValid = _formKey.currentState!.validate();
+      if (!isValid) {
+        return;
+      }
+
+      setState(() {
+        validate = true;
+      });
+    }
+
     dynamic validateFunc(value) {
       if (value!.isEmpty) {
         return getTranslated(context, 'required');
       }
+      // onChangeField();
+
       return null;
     }
 
@@ -84,27 +98,28 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
       if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
         return getTranslated(context, 'enter_valid_value');
       }
+      //onChangeField();
       return null;
     }
 
     dynamic confirmPasswordValidate(String? value) {
+      // onChangeField();
       return value!.isEmpty || value != passwordValue
           ? getTranslated(context, 'passord_mutch')
           : null;
     }
 
-    Future signup({verificationCode}) async {
+    Future signup(data) async {
       try {
-        Map<String, String> data = {"verificationCode": verificationCode};
         final response = await http.patch(
             Uri.parse(
-                'https://development.connectto.com:8085/hyeid-back/v2/user/verify'),
+                'https://development.connectto.com:8085/hyeid-back/v2/user/reset-password'),
             headers: {
               "Accept": "*/*",
-              "Content-Type": "text/plain",
+              "Content-Type": "application/json",
               "Authorization": "Basic bW9iaWxlOnNlY3JldA=="
             },
-            body: json.encode(int.parse(verificationCode)));
+            body: json.encode(data));
 
         if (response.statusCode == 200) {
           Navigator.pushReplacementNamed(context, "/");
@@ -118,10 +133,6 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
                     ? responseBody['message']
                     : null;
           });
-          print(responseBody.toString());
-          // if (_formKey.currentState!.validate()) {
-          //   Navigator.pushReplacementNamed(context, "/");
-          // } else {}
         }
       } catch (e) {
         print(e);
@@ -130,16 +141,15 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
 
     Future ResendActivationCode() async {
       try {
+        print(passingData.toString());
         final response = await http.patch(
             Uri.parse(
-                'https://development.connectto.com:8085/hyeid-back/v2/user/resend'),
+                'https://development.connectto.com:8085/hyeid-back/v2/user/forgot-password'),
             headers: {"Accept": "*/*", "Content-Type": "application/json"},
             body: json.encode(passingData));
 
         if (response.statusCode == 200) {
-          setState(() {
-            resendCode = true;
-          });
+          //
         } else {
           Map responseBody = json.decode(response.body);
 
@@ -152,19 +162,19 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
       }
     }
 
-    void onChangeField(val) {
-      return;
-    }
-
     void onSubmit() async {
       final isValid = _formKey.currentState!.validate();
       if (!isValid) {
         return;
       }
       _formKey.currentState!.save();
-      signup(
-        verificationCode: verificationCode.text,
-      );
+
+      Map data = {
+        "resetPasswordToken": verificationCode.text,
+        "password": password.text,
+        "passwordConfirmation": confirmPassword.text
+      };
+      await signup(data);
     }
 
     Size size = MediaQuery.of(context).size;
@@ -214,16 +224,6 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
                         const SizedBox(
                           height: 34,
                         ),
-
-                        // Text(
-                        //   resendCode == true
-                        //       ? getTranslated(context, 'resend_activation_code')
-                        //       : '',
-                        //   style: const TextStyle(
-                        //     color: Color.fromRGBO(59, 158, 146, 1),
-                        //   ),
-                        // ),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,11 +247,6 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
                               ),
                               child: InkWell(
                                 onTap: () async {
-                                  if (resendCode) return;
-                                  setState(() {
-                                    alert = DateTime.now()
-                                        .add(const Duration(seconds: 60));
-                                  });
                                   await ResendActivationCode();
                                 },
                                 child: Row(
@@ -301,9 +296,6 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
                         const SizedBox(
                           height: 24,
                         ),
-                        // const SizedBox(
-                        //   height: 15,
-                        // ),
                         PasswordTextField(
                           controller: password,
                           name: 'Password',
@@ -322,9 +314,6 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
                         const SizedBox(
                           height: 62,
                         ),
-                        // const Divider(
-                        //   color: Color.fromRGBO(34, 33, 32, 0.25),
-                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -333,6 +322,8 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
                               backgroundColor: kPrimaryColor,
                               text: 'done',
                               textColor: Colors.white,
+                              doneForSubmitted: validate,
+                              screenName: 'changePassword',
                             ),
                           ],
                         ),
@@ -350,13 +341,4 @@ class _WebChangePasswordBodyState extends State<WebChangePasswordBody> {
       ),
     );
   }
-}
-
-String formatDuration(Duration d) {
-  String f(int n) {
-    return n.toString().padLeft(2, '0');
-  }
-
-  d += const Duration(microseconds: 999999);
-  return "${f(d.inMinutes)}:${f(d.inSeconds % 60)}";
 }
